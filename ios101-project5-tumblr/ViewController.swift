@@ -13,29 +13,48 @@ class ViewController: UIViewController, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Create, configure, and return a table view cell for the given row (i.e., `indexPath.row`)
         
-        // Create the cell
-        let cell = UITableViewCell()
-        
-        // Get the movie-associated table view row
-        let post = posts[indexPath.row]
-        
-        // Configure the cell (i.e., update UI elements like labels, image views, etc.)
-        cell.textLabel?.text = post.summary
-        
-        // Return the cell for use in the respective table view row
-        return cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
+
+                // Get the movie associated table view row
+            let post = posts[indexPath.row]
+
+            // Configure the cell (i.e., update UI elements like labels, image views, etc.)
+
+            // Unwrap the optional poster path
+            if let photo = post.photos.first {
+                let url = photo.originalSize.url
+                if let imageUrl = URL(string: "https://image.tmdb.org/t/p/w500/\(url)") {
+                    Nuke.loadImage(with: imageUrl, into: cell.poster) { result in
+                        switch result {
+                        case .success:
+                            // Image loaded successfully
+                            break // No action needed
+                        case .failure(let error):
+                            // Handle image loading failure
+                            print("Failed to load image: \(error)")
+                        }
+                    }
+                }
+            }
+
+            // Set the text on the labels
+            cell.caption.text = post.caption
+            cell.summary.text = post.summary
+
+            // Return the cell for use in the respective table view row
+            return cell
     }
     
 
     @IBOutlet weak var tableView: UITableView!
+    
+    //Array to fetch blog posts
     private var posts: [Post] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
-
         
         fetchPosts()
     }
