@@ -21,31 +21,18 @@ class ViewController: UIViewController, UITableViewDataSource {
 
             // Configure the cell (i.e., update UI elements like labels, image views, etc.)
 
-            // Unwrap the optional poster path
             if let photo = post.photos.first {
                 let url = photo.originalSize.url
-                if let imageUrl = URL(string: "https://image.tmdb.org/t/p/w500/\(url)") {
-                    Nuke.loadImage(with: imageUrl, into: cell.poster) { result in
-                        switch result {
-                        case .success:
-                            // Image loaded successfully
-                            break // No action needed
-                        case .failure(let error):
-                            // Handle image loading failure
-                            print("Failed to load image: \(error)")
-                        }
-                    }
-                }
+                    Nuke.loadImage(with: url, into: cell.poster)
             }
 
             // Set the text on the labels
-            cell.caption.text = post.caption
             cell.summary.text = post.summary
 
             // Return the cell for use in the respective table view row
             return cell
     }
-    
+
 
     @IBOutlet weak var tableView: UITableView!
     

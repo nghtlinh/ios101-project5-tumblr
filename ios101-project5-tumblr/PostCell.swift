@@ -13,8 +13,6 @@ class PostCell: UITableViewCell {
     
     @IBOutlet weak var summary: UILabel!
     
-    @IBOutlet weak var caption: UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
